@@ -1,0 +1,14 @@
+path: datasets
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 39
+names: ['angular_brick_1x1', 'brick_1x2', 'brick_1x4', 'brick_2x2', 'brick_2x4', 'brick_arch_2x3', 'brick_bow_1x4', 'brick_cross_2x2', 'brick_knob_1x1', 'brick_pin_2x2', 'brick_slope_curved_1x2', 'door', 'eye_piece', 'inverted_roof_tile_2x3', 'nose_cone_1x1', 'plate_1x1x2', 'plate_1x3', 'plate_1x4', 'plate_2x3', 'plate_2x4', 'plate_2x6', 'plate_2x8', 'plate_4x4', 'plate_8x16', 'plate_cross_3x3', 'plate_knob_2x2', 'propeller_4blades', 'roof_tile_1x1x2', 'roof_tile_1x2', 'roof_tile_1x2x2', 'roof_tile_1x3', 'roof_tile_2x1x2', 'roof_tile_2x2', 'roof_tile_2x4', 'round_brick_1x1', 'round_plate_1x1', 'transparent_brick_1x2', 'wall_window_1x2x2', 'window_frame_1x2x2']
+
+roboflow:
+  workspace: nunos-workspace-rwjb5
+  project: lego-detection-sqibp
+  version: 4
+  license: Private
+  url: https://app.roboflow.com/nunos-workspace-rwjb5/lego-detection-sqibp/4
