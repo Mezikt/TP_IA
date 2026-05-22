@@ -1,0 +1,207 @@
+{
+  "manifest_version": "1.0",
+  "model": {
+    "name": "lego_detection_yolov8s",
+    "version": "1.0",
+    "description": "YOLOv8s model for LEGO brick detection and classification. Detects 40 types of LEGO pieces and supports color identification via OpenCV HSV post-processing.",
+    "task": "object_detection",
+    "architecture": "YOLOv8s",
+    "framework": "ultralytics",
+    "framework_version": ">=8.0.0",
+    "weights_file": "weights/best.pt",
+    "config_file": "train_config.yaml",
+    "input": {
+      "type": "image",
+      "format": ["jpg", "jpeg", "png", "bmp", "webp"],
+      "size": [640, 640],
+      "channels": 3,
+      "color_space": "BGR"
+    },
+    "output": {
+      "type": "bounding_boxes",
+      "format": "xyxy",
+      "fields": ["class_id", "class_name", "confidence", "bbox"]
+    }
+  },
+  "dataset": {
+    "name": "Lego Detection v3",
+    "platform": "Roboflow",
+    "workspace": "nunos-workspace-rwjb5",
+    "project": "lego-detection-sqibp",
+    "version": 3,
+    "total_images": 2129,
+    "splits": {
+      "train": 0.70,
+      "valid": 0.20,
+      "test":  0.10
+    },
+    "image_size": [640, 640],
+    "format": "yolov8"
+  },
+  "classes": {
+    "num_classes": 40,
+    "names": [
+      "angular_brick_1x1",
+      "brick_1x2",
+      "brick_1x4",
+      "brick_2x2",
+      "brick_2x4",
+      "brick_arch_2x3",
+      "brick_bow_1x4",
+      "brick_cross_2x2",
+      "brick_knob_1x1",
+      "brick_pin_2x2",
+      "brick_slope_curved_1x2",
+      "door",
+      "eye_piece",
+      "inverted_roof_tile_2x3",
+      "nose_cone_1x1",
+      "plate_1x1x2",
+      "plate_1x3",
+      "plate_1x4",
+      "plate_2x3",
+      "plate_2x4",
+      "plate_2x6",
+      "plate_2x8",
+      "plate_4x4",
+      "plate_8x16",
+      "plate_cross_3x3",
+      "plate_knob_2x2",
+      "propeller_4blades",
+      "roof_2x2",
+      "roof_tile_1x1x2",
+      "roof_tile_1x2",
+      "roof_tile_1x2x2",
+      "roof_tile_1x3",
+      "roof_tile_2x1x2",
+      "roof_tile_2x2",
+      "roof_tile_2x4",
+      "round_brick_1x1",
+      "round_plate_1x1",
+      "transparent_brick_1x2",
+      "wall_window_1x2x2",
+      "window_frame_1x2x2"
+    ],
+    "categories": {
+      "bricks": [
+        "angular_brick_1x1", "brick_1x2", "brick_1x4", "brick_2x2", "brick_2x4",
+        "brick_arch_2x3", "brick_bow_1x4", "brick_cross_2x2", "brick_knob_1x1",
+        "brick_pin_2x2", "brick_slope_curved_1x2", "transparent_brick_1x2"
+      ],
+      "plates": [
+        "plate_1x1x2", "plate_1x3", "plate_1x4", "plate_2x3", "plate_2x4",
+        "plate_2x6", "plate_2x8", "plate_4x4", "plate_8x16",
+        "plate_cross_3x3", "plate_knob_2x2"
+      ],
+      "roof_tiles": [
+        "inverted_roof_tile_2x3", "roof_2x2", "roof_tile_1x1x2", "roof_tile_1x2",
+        "roof_tile_1x2x2", "roof_tile_1x3", "roof_tile_2x1x2", "roof_tile_2x2",
+        "roof_tile_2x4"
+      ],
+      "special": [
+        "door", "eye_piece", "nose_cone_1x1", "propeller_4blades",
+        "round_brick_1x1", "round_plate_1x1", "wall_window_1x2x2",
+        "window_frame_1x2x2"
+      ]
+    }
+  },
+  "training": {
+    "base_model": "yolov8s.pt",
+    "pretrained": true,
+    "pretrained_on": "COCO",
+    "epochs": 100,
+    "batch_size": 16,
+    "image_size": 640,
+    "optimizer": "auto",
+    "lr0": 0.01,
+    "lrf": 0.01,
+    "momentum": 0.937,
+    "weight_decay": 0.0005,
+    "warmup_epochs": 3,
+    "patience": 50,
+    "augmentation": {
+      "roboflow": [
+        "horizontal_flip_p0.5",
+        "rotation_-15_to_+15",
+        "crop_0_to_20pct",
+        "brightness_-15_to_+15pct",
+        "exposure_-10_to_+10pct"
+      ],
+      "ultralytics_realtime": [
+        "hsv_h0.015", "hsv_s0.7", "hsv_v0.4",
+        "fliplr0.5", "mosaic1.0", "scale0.5", "translate0.1"
+      ]
+    }
+  },
+  "metrics": {
+    "note": "Fill after training",
+    "mAP50": null,
+    "mAP50_95": null,
+    "precision": null,
+    "recall": null,
+    "per_class": {}
+  },
+  "inference": {
+    "recommended_conf": 0.25,
+    "recommended_iou": 0.70,
+    "avg_inference_ms": null,
+    "entry_point": "python infer.py --model weights/best.pt --image path/to/image.jpg",
+    "demo_app": "streamlit run app/app.py"
+  },
+  "assumptions": {
+    "camera_distance_cm": "20-60",
+    "background": "uniform color preferred (white, grey, black)",
+    "illumination": "uniform, no strong direct light or shadows",
+    "min_visibility_pct": 40,
+    "supported_colors": [
+      "vermelho", "verde", "amarelo", "azul", "laranja",
+      "rosa", "castanho", "preto", "branco", "transparente", "cinzento"
+    ]
+  },
+  "known_failure_modes": [
+    "Small 1x1 pieces at long distances may be missed",
+    "Heavy occlusion (>60%) degrades classification accuracy",
+    "White pieces on white backgrounds are harder to detect",
+    "brick_2x2 and brick_2x4 may be confused at oblique angles",
+    "round_plate_1x1 and round_brick_1x1 can be confused",
+    "Transparent pieces have less texture and lower detection rates",
+    "Extreme angles (>45 degrees) may confuse roof tile classes"
+  ],
+  "constructions_supported": {
+    "crocodilo": {
+      "brick_2x4": 4, "brick_2x2": 2, "plate_2x4": 2,
+      "plate_2x6": 1, "roof_tile_2x4": 2, "roof_tile_1x2": 4,
+      "angular_brick_1x1": 2, "round_plate_1x1": 4
+    },
+    "flor": {
+      "brick_2x2": 2, "plate_4x4": 1, "roof_tile_2x4": 4,
+      "round_plate_1x1": 1, "plate_knob_2x2": 1, "brick_slope_curved_1x2": 4
+    },
+    "fantasma": {
+      "brick_2x2": 3, "brick_2x4": 2, "plate_2x4": 2,
+      "roof_tile_1x2": 4, "roof_tile_2x2": 2,
+      "eye_piece": 2, "transparent_brick_1x2": 2
+    },
+    "moinho": {
+      "plate_8x16": 1, "brick_2x4": 6, "brick_2x2": 4,
+      "brick_1x2": 4, "roof_tile_2x4": 4, "roof_tile_1x2": 6,
+      "door": 1, "window_frame_1x2x2": 2, "propeller_4blades": 1,
+      "plate_2x8": 2, "plate_2x4": 2
+    }
+  },
+  "color_detection": {
+    "method": "OpenCV HSV",
+    "library": "opencv-python",
+    "approach": "HSV range matching with morphological erosion for background removal",
+    "supported_colors": [
+      "vermelho", "verde", "amarelo", "azul", "laranja",
+      "rosa", "castanho", "preto", "branco", "transparente", "cinzento"
+    ]
+  },
+  "project": {
+    "course": "Inteligência Artificial",
+    "degree": "Licenciatura em Engenharia Informática",
+    "institution": "ESTG — Escola Superior de Tecnologia e Gestão",
+    "academic_year": "2025/2026"
+  }
+}
