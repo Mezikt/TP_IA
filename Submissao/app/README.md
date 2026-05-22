@@ -1,6 +1,16 @@
-# Aplicação de Demonstração - Detetor de Legos
+# App de Demonstração — LEGO Detector
 
-## Como executar:
-1. Instale as dependências: `pip install -r requirements.txt`
-2. Garanta que está na pasta raiz do projeto.
-3. Execute o comando: `streamlit run app/app.py`
+## Como correr
+
+```bash
+# A partir da pasta TP_IA_LEGO/
+cd app
+streamlit run app.py
+```
+
+A app abre em http://localhost:8501
+
+## Pré-requisitos
+
+- Modelo treinado em `../modelos/lego_v3_s/weights/best.pt`
+- Dependências instaladas (`pip install -r ../requirements.txt`)
