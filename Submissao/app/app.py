@@ -77,6 +77,16 @@ CONSTRUCTIONS = {
     },
 }
 
+# ─── Mapa de PDFs das construções ──────────────────────────────────────────────
+
+CONSTRUCTIONS_PDFS = {
+    "👻 Fantasma": "construcoes/fantasma_lego.pdf",
+    "🏠 Moinho":   "construcoes/moinho_lego.pdf",
+    "🌸 Flor":     "construcoes/manual_lego.pdf",
+    "🐊 Crocodilo": "construcoes/manual_lego.pdf",
+    
+}
+
 # ─── Página ───────────────────────────────────────────────────────────────────
 
 st.set_page_config(
@@ -217,6 +227,15 @@ st.markdown("""
 @st.cache_resource
 def load_model(model_path: str):
     return YOLO(model_path)
+
+
+def get_pdf_data(pdf_path: str):
+    """Carrega o PDF para ser servido pelo Streamlit."""
+    full_path = Path("..") / pdf_path
+    if full_path.exists():
+        with open(full_path, "rb") as f:
+            return f.read()
+    return None
 
 
 def find_models(base_dir: str = "..") -> dict:
@@ -481,6 +500,19 @@ if image_bgr is not None:
                 <div style="font-size:0.82rem;font-weight:600;margin-top:6px;color:{color}">{badge}</div>
                 {missing_html}
             </div>""", unsafe_allow_html=True)
+            
+            # Botão para abrir o PDF (se existir)
+            if rec["name"] in CONSTRUCTIONS_PDFS:
+                pdf_path = CONSTRUCTIONS_PDFS[rec["name"]]
+                pdf_data = get_pdf_data(pdf_path)
+                if pdf_data:
+                    st.download_button(
+                        label="📥 Abrir Instruções (PDF)",
+                        data=pdf_data,
+                        file_name=Path(pdf_path).name,
+                        mime="application/pdf",
+                        key=f"pdf_{rec['name']}"
+                    )
 
     st.markdown("---")
 
@@ -579,6 +611,19 @@ else:
                     {'<div style="font-size:0.72rem;color:#9ca3af">...</div>' if len(parts)>5 else ''}
                 </div>
             </div>""", unsafe_allow_html=True)
+            
+            # Botão para abrir o PDF (se existir)
+            if name in CONSTRUCTIONS_PDFS:
+                pdf_path = CONSTRUCTIONS_PDFS[name]
+                pdf_data = get_pdf_data(pdf_path)
+                if pdf_data:
+                    st.download_button(
+                        label="📥 Abrir Instruções (PDF)",
+                        data=pdf_data,
+                        file_name=Path(pdf_path).name,
+                        mime="application/pdf",
+                        key=f"pdf_initial_{name}"
+                    )
 
     st.markdown("---")
     st.markdown("""
