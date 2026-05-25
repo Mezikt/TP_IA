@@ -49,7 +49,7 @@ CONSTRUCTIONS = {
         "brick_arch_2x3":         1,
         "brick_knob_1x1":         2,
         "eye_piece":              2,
-        "inverted_roof_tile_2x3": 4,
+        "inverted_roof_tile_2x3": 2,
         "plate_2x4":              2,
         "plate_2x6":              1,
         "roof_tile_1x2x2":        2,
